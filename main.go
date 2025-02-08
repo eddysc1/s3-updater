@@ -129,7 +129,7 @@ func selectBucket(buckets []string) string {
 }
 
 func downloadBucket(profile, bucket string) {
-	cmd := exec.Command("aws", "s3", "sync", fmt.Sprintf("s3://%s", bucket), "./content", "--profile", profile)
+	cmd := exec.Command("aws", "s3", "sync", fmt.Sprintf("s3://%s", bucket), "/tmp/s3-uploader", "--profile", profile)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
@@ -137,7 +137,7 @@ func downloadBucket(profile, bucket string) {
 		fmt.Println("Error downloading bucket contents:", err)
 		os.Exit(1)
 	}
-	fmt.Println("Download completed successfully.")
+	fmt.Println("Download completed successfully. Modify contents in /tmp/s3-uploader and choose to reupload in the next step.")
 }
 
 func askForReupload() bool {
@@ -149,7 +149,7 @@ func askForReupload() bool {
 }
 
 func uploadBucket(profile, bucket string) {
-	cmd := exec.Command("aws", "s3", "sync", "./content", fmt.Sprintf("s3://%s", bucket), "--profile", profile)
+	cmd := exec.Command("aws", "s3", "sync", "/tmp/s3-uploader", fmt.Sprintf("s3://%s", bucket), "--profile", profile)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
