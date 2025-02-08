@@ -129,7 +129,12 @@ func selectBucket(buckets []string) string {
 }
 
 func downloadBucket(profile, bucket string) {
-	err := os.MkdirAll("/tmp/s3-updater", 0755)
+	err := os.RemoveAll("/tmp/s3-updater")
+	if err != nil {
+		fmt.Println("Error removing directory /tmp/s3-updater:", err)
+		os.Exit(1)
+	}
+	err = os.MkdirAll("/tmp/s3-updater", 0755)
 	if err != nil {
 		fmt.Println("Error creating directory /tmp/s3-updater:", err)
 		os.Exit(1)
