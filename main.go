@@ -129,10 +129,15 @@ func selectBucket(buckets []string) string {
 }
 
 func downloadBucket(profile, bucket string) {
+	err := os.MkdirAll("/tmp/s3-updater", 0755)
+	if err != nil {
+		fmt.Println("Error creating directory /tmp/s3-updater:", err)
+		os.Exit(1)
+	}
 	cmd := exec.Command("aws", "s3", "sync", "--delete", fmt.Sprintf("s3://%s", bucket), "/tmp/s3-updater", "--profile", profile)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	err := cmd.Run()
+	err = cmd.Run()
 	if err != nil {
 		fmt.Println("Error downloading bucket contents:", err)
 		os.Exit(1)
