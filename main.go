@@ -129,7 +129,7 @@ func selectBucket(buckets []string) string {
 }
 
 func downloadBucket(profile, bucket string) {
-	cmd := exec.Command("aws", "s3", "sync", fmt.Sprintf("s3://%s", bucket), "/tmp/s3-updater", "--profile", profile)
+	cmd := exec.Command("aws", "s3", "sync", "--delete", fmt.Sprintf("s3://%s", bucket), "/tmp/s3-updater", "--profile", profile)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
